@@ -4,7 +4,7 @@ import theme from "@/src/theme";
 export const Headline = chakra(Heading, {
   baseStyle: {
     fontWeight: 800,
-    color: theme.colors.background_on,
+    color: theme.colors.primary_variant,
   },
 });
 
@@ -54,7 +54,7 @@ export const HeadlineAuto = chakra(Headline, {
 export const Body = chakra(Text, {
   baseStyle: {
     fontWeight: "normal",
-    color: theme.colors.background_on,
+    color: theme.colors.secondary,
   },
 });
 
@@ -80,7 +80,7 @@ export const Button = chakra(Text, {
   baseStyle: {
     fontWeight: 500,
     fontSize: "14px",
-    color: theme.colors.background_on,
+    color: theme.colors.primary,
   },
 });
 
@@ -88,7 +88,7 @@ export const Caption = chakra(Text, {
   baseStyle: {
     fontWeight: "normal",
     fontSize: "12px",
-    color: theme.colors.background_on,
+    color: theme.colors.caption,
   },
 });
 
@@ -99,7 +99,7 @@ export const Link = chakra(ChakraLink, {
     color: theme.colors.primary,
     _hover: {
       textDecoration: "none",
-      color: theme.colors.primary_variant,
+      color: theme.colors.primary,
     },
   },
 });

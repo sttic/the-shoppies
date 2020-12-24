@@ -9,12 +9,41 @@ export const Button = chakra(ChakraButton, {
   },
 });
 
-export const ButtonCTA = chakra(Button, {
+export const ButtonPrimary = chakra(Button, {
   baseStyle: {
     fontWeight: "bold",
     color: "white",
     background: theme.colors.primary,
     padding: "16px 42px",
+    _hover: {
+      background: theme.colors.primary_variant,
+    },
+    _active: {
+      background: theme.colors.primary_active,
+    },
+  },
+});
+
+export const ButtonSecondary = chakra(ButtonPrimary, {
+  baseStyle: {
+    color: theme.colors.primary,
+    background: "none",
+    padding: "12px 24px",
+    border: `1px solid ${theme.colors.primary}`,
+    _hover: {
+      color: "white",
+      background: theme.colors.primary_variant,
+      border: `1px solid ${theme.colors.primary_variant}`,
+    },
+    _active: {
+      background: theme.colors.primary_active,
+      color: "white",
+    },
+  },
+});
+
+export const ButtonCTA = chakra(ButtonPrimary, {
+  baseStyle: {
     position: "relative",
     _hover: {
       background: theme.colors.primary_variant,
@@ -24,7 +53,7 @@ export const ButtonCTA = chakra(Button, {
       },
     },
     _active: {
-      background: `${theme.colors.primary_variant_active}`,
+      background: theme.colors.primary_active,
     },
     _after: {
       backgroundImage: `url("/images/button_background.png")`,
@@ -38,31 +67,6 @@ export const ButtonCTA = chakra(Button, {
       left: "5px",
       transition: "top 0.1s, left 0.1s",
       zIndex: -1,
-    },
-  },
-});
-
-export const ButtonPrimary = chakra(Button, {
-  baseStyle: {
-    fontWeight: 400,
-    color: "white",
-    padding: "4px 16px",
-    background: theme.colors.background_on,
-    border: `1px solid ${theme.colors.background_on}`,
-    _hover: {
-      background: "black",
-    },
-  },
-});
-
-export const ButtonSecondary = chakra(ButtonPrimary, {
-  baseStyle: {
-    fontWeight: 400,
-    color: theme.colors.background_on,
-    background: "none",
-    _hover: {
-      color: "white",
-      background: theme.colors.background_on,
     },
   },
 });

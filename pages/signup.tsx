@@ -31,8 +31,11 @@ const encodedBackgroundSVG =
 const emailRegex = new RegExp(
   "^[\\w.\\-]{1,100}@[\\w.\\-]{1,100}\\.[A-Za-z]{2,4}$"
 );
+const passwordRegex = new RegExp(
+  `(?:(?:(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_])|(?:(?=.*?[0-9])|(?=.*?[A-Z])|(?=.*?[-!@#$%&*ˆ+=_])))|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_]))[A-Za-z0-9-!@#$%&*ˆ+=_]{6,15}`
+);
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const validateEmail = (email: string) => {
@@ -40,6 +43,8 @@ const LoginPage = () => {
 
     if (!email) {
       error = "Please enter an email";
+    } else if (email.length >= 100) {
+      error = "Email is too long";
     } else if (!emailRegex.test(email)) {
       error = "Email has invalid format";
     }
@@ -52,6 +57,12 @@ const LoginPage = () => {
 
     if (!password) {
       error = "Please enter a password";
+    } else if (password.length < 6) {
+      error = "Password needs to be at least 6 characters long";
+    } else if (password.length > 15) {
+      error = "Password needs to be less than 16 characters long";
+    } else if (passwordRegex.test(password)) {
+      error = "Password contains invalid characters";
     }
 
     return error;
@@ -60,7 +71,7 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-        <title>The Shoppies - Login</title>
+        <title>The Shoppies - Sign up</title>
       </Head>
 
       <Box
@@ -88,7 +99,7 @@ const LoginPage = () => {
                   The Shoppies
                 </Headline4>
                 <HeadlineVarient fontSize="20px !important" marginBottom="2rem">
-                  Login
+                  Sign up
                 </HeadlineVarient>
                 <Formik
                   initialValues={{ email: "", password: "" }}
@@ -166,15 +177,15 @@ const LoginPage = () => {
                         isLoading={props.isSubmitting}
                         type="submit"
                       >
-                        Login
+                        Sign up
                       </ButtonPrimary>
                     </Form>
                   )}
                 </Formik>
                 <Body2 marginTop="36px">
-                  New to The Shoppies?{" "}
-                  <NextLink href={RoutePath.SignUp} passHref>
-                    <Link>Sign up</Link>
+                  Already have an account?{" "}
+                  <NextLink href={RoutePath.Login} passHref>
+                    <Link>Login</Link>
                   </NextLink>
                 </Body2>
               </Card>
@@ -186,4 +197,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

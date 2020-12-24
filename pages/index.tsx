@@ -2,7 +2,7 @@ import NextLink from "next/link";
 import { Box, Flex, Grid, Link } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Container } from "@/components/core/Layout";
-import { ButtonCTA } from "@/components/core/Button";
+import { ButtonCTA, ButtonSecondary } from "@/components/core/Button";
 import { Body, Headline, Headline6 } from "@/components/core/Text";
 import AwardGraphic from "@/components/svgs/undraw_awards_fieb.svg";
 import Header from "@/components/Header";
@@ -22,6 +22,14 @@ const MyArrowForwardIcon = () => (
   </Flex>
 );
 
+const GetStartedSecondaryButton = (
+  <NextLink href={RoutePath.Login} passHref>
+    <Link textDecoration="none !important">
+      <ButtonSecondary>Get started</ButtonSecondary>
+    </Link>
+  </NextLink>
+);
+
 const HomePage = () => (
   <Flex
     direction="column"
@@ -30,7 +38,7 @@ const HomePage = () => (
     minHeight={[700, 800, 550, 640].map((height) => `${height}px`)}
     background={theme.colors.background}
   >
-    <Header />
+    <Header rightElement={GetStartedSecondaryButton} />
     <Container height="100%">
       <Flex direction="column" justify="center" height="100%">
         <Headline6

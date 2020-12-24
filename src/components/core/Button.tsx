@@ -32,10 +32,10 @@ export const ButtonPrimary = chakra(Button, {
 
 export const ButtonSecondary = chakra(ButtonPrimary, {
   baseStyle: {
-    color: theme.colors.primary,
+    color: theme.colors.primary_variant,
     background: "none",
     padding: "12px 24px",
-    border: `1px solid ${theme.colors.primary}`,
+    border: `1px solid ${theme.colors.primary_variant}`,
     _hover: {
       color: "white",
       background: theme.colors.primary_variant,

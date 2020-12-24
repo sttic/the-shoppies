@@ -1,11 +1,13 @@
-import { Box, Flex, Grid } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { Box, Flex, Grid, Link } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Container } from "@/components/core/Layout";
 import { ButtonCTA } from "@/components/core/Button";
-import { Body1, Headline, Headline6 } from "@/components/core/Text";
+import { Body, Headline, Headline6 } from "@/components/core/Text";
 import AwardGraphic from "@/components/svgs/undraw_awards_fieb.svg";
 import Header from "@/components/Header";
 import theme from "@/src/theme";
+import RoutePath from "@/src/routes";
 
 const MyArrowForwardIcon = () => (
   <Flex
@@ -54,13 +56,21 @@ const HomePage = () => (
             >
               Movie awards <br /> for entrepreneurs
             </Headline>
-            <Body1 textAlign={["center", "center", "left"]} marginBottom="48px">
+            <Body
+              fontSize="18px"
+              textAlign={["center", "center", "left"]}
+              marginBottom="48px"
+            >
               Nominate your favorite films.
-            </Body1>
+            </Body>
             <Flex justify={["center", "center", "start"]}>
-              <ButtonCTA rightIcon={<MyArrowForwardIcon />}>
-                Get started
-              </ButtonCTA>
+              <NextLink href={RoutePath.Login} passHref>
+                <Link textDecoration="none !important">
+                  <ButtonCTA rightIcon={<MyArrowForwardIcon />}>
+                    Get started
+                  </ButtonCTA>
+                </Link>
+              </NextLink>
             </Flex>
           </Box>
           <Box
@@ -72,7 +82,6 @@ const HomePage = () => (
             <AwardGraphic
               width="100%"
               height="auto"
-              viewBox="0 0 1081 840.51"
               preserveAspectRatio="xMidYMid meet"
             />
           </Box>

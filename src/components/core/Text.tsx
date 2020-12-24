@@ -51,6 +51,14 @@ export const HeadlineAuto = chakra(Headline, {
   },
 });
 
+export const HeadlineVarient = chakra(Heading, {
+  baseStyle: {
+    fontFamily: "Inter",
+    fontWeight: 400,
+    color: theme.colors.secondary,
+  },
+});
+
 export const Body = chakra(Text, {
   baseStyle: {
     fontWeight: "normal",
@@ -98,8 +106,7 @@ export const Link = chakra(ChakraLink, {
     fontSize: "14px",
     color: theme.colors.primary,
     _hover: {
-      textDecoration: "none",
-      color: theme.colors.primary,
+      color: theme.colors.primary_variant,
     },
   },
 });

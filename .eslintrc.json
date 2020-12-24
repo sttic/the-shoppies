@@ -46,6 +46,7 @@
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
     "react/display-name": "warn",
+    "jsx-a11y/anchor-is-valid": "warn",
     "prettier/prettier": ["warn", {}, { "usePrettierrc": true }]
   }
 }

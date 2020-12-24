@@ -9,7 +9,7 @@ interface HeaderProps {
 
 const Header = ({ rightElement }: HeaderProps) => (
   <header>
-    <Container display={["none", "none", "block"]}>
+    <Container>
       <Flex
         height="64px"
         align="center"

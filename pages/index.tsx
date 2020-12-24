@@ -23,7 +23,7 @@ const MyArrowForwardIcon = () => (
 );
 
 const GetStartedSecondaryButton = (
-  <NextLink href={RoutePath.Login} passHref>
+  <NextLink href={RoutePath.SignUp} passHref>
     <Link textDecoration="none !important">
       <ButtonSecondary>Get started</ButtonSecondary>
     </Link>
@@ -38,7 +38,9 @@ const HomePage = () => (
     minHeight={[700, 800, 550, 640].map((height) => `${height}px`)}
     background={theme.colors.background}
   >
-    <Header rightElement={GetStartedSecondaryButton} />
+    <Box display={["none", "none", "block"]}>
+      <Header rightElement={GetStartedSecondaryButton} />
+    </Box>
     <Container height="100%">
       <Flex direction="column" justify="center" height="100%">
         <Headline6
@@ -80,7 +82,7 @@ const HomePage = () => (
               Nominate your favorite films.
             </Body>
             <Flex justify={["center", "center", "start"]}>
-              <NextLink href={RoutePath.Login} passHref>
+              <NextLink href={RoutePath.SignUp} passHref>
                 <Link textDecoration="none !important">
                   <ButtonCTA rightIcon={<MyArrowForwardIcon />}>
                     Get started

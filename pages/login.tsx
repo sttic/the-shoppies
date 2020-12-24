@@ -161,7 +161,7 @@ const LoginPage = () => {
                         </Field>
                       </Stack>
                       <ButtonPrimary
-                        width="100%"
+                        isFullWidth
                         marginTop="24px"
                         isLoading={props.isSubmitting}
                         type="submit"

@@ -36,13 +36,16 @@
   "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
   "rules": {
     "no-console": "error",
+    "import/no-unresolved": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-props-no-spreading": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-closing-tag-location": "off",
     "react/jsx-filename-extension": [
       1,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
     "react/display-name": "warn",
-    "prettier/prettier": "warn"
+    "prettier/prettier": ["warn", {}, { "usePrettierrc": true }]
   }
 }

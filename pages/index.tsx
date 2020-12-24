@@ -8,6 +8,7 @@ import AwardGraphic from "@/components/svgs/undraw_awards_fieb.svg";
 import Header from "@/components/Header";
 import theme from "@/src/theme";
 import RoutePath from "@/src/routes";
+import Typed from "react-typed";
 
 const MyArrowForwardIcon = () => (
   <Flex
@@ -54,7 +55,14 @@ const HomePage = () => (
               textAlign={["center", "center", "left"]}
               marginBottom="16px"
             >
-              Movie awards <br /> for entrepreneurs
+              Movie awards <br /> for{" "}
+              <Typed
+                strings={["entrepreneurs", "startups", "leaders", "you"]}
+                typeSpeed={80}
+                backSpeed={60}
+                startDelay={1000}
+                backDelay={4000}
+              />
             </Headline>
             <Body
               fontSize="18px"

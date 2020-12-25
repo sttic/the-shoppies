@@ -17,6 +17,8 @@ import { Body, Body1, Headline } from "@/components/core/Text";
 import ReactPaginate from "react-paginate";
 import { IMovieData } from "@/src/types";
 import AwardGraphic from "@/components/svgs/undraw_awards_fieb.svg";
+import useStore from "@/src/store";
+import { useToast } from "@chakra-ui/react";
 
 interface MovieDisplayProps {
   titleSearch: string;
@@ -25,44 +27,51 @@ interface MovieDisplayProps {
   data?: IMovieData;
 }
 
+const DisplayAreaMessage = (props: { message: string }) => (
+  <Grid height="90%">
+    <Body
+      gridColumn={1}
+      gridRow={1}
+      zIndex={1}
+      fontSize="16px"
+      fontWeight="bold"
+    >
+      {props.message}
+    </Body>
+    <Box
+      gridColumn={1}
+      gridRow={1}
+      filter="grayscale(1)"
+      opacity={0.04}
+      maxWidth="3in"
+      justifySelf="center"
+      alignSelf="center"
+    >
+      <AwardGraphic
+        width="100%"
+        height="auto"
+        preserveAspectRatio="xMidYMid meet"
+      />
+    </Box>
+  </Grid>
+);
+
 const MovieDisplay = (props: MovieDisplayProps) => {
   const { titleSearch, currentPage, handlePageChange, data } = props;
+  const nominations = useStore((state) => state.nominations);
+  const addNomination = useStore((state) => state.addNomination);
+  const toast = useToast();
+
+  const numNominations = Object.keys(nominations).length;
 
   if (!data) {
     return (
-      <>
-        <Grid>
-          <Body
-            gridColumn={1}
-            gridRow={1}
-            zIndex={1}
-            fontSize="16px"
-            fontWeight="bold"
-          >
-            Search for movie titles and add them to your nominations.
-          </Body>
-          <Box
-            gridColumn={1}
-            gridRow={1}
-            filter="grayscale(1)"
-            opacity={0.04}
-            maxWidth="3in"
-            justifySelf="center"
-            alignSelf="center"
-          >
-            <AwardGraphic
-              width="100%"
-              height="auto"
-              preserveAspectRatio="xMidYMid meet"
-            />
-          </Box>
-        </Grid>
-      </>
+      <DisplayAreaMessage message="Search for movie titles and add them to your nominations." />
     );
   }
 
   if (data.Error) {
-    return <>error</>;
+    return <DisplayAreaMessage message="No movies found." />;
   }
 
   if (data.Search) {
@@ -71,7 +80,7 @@ const MovieDisplay = (props: MovieDisplayProps) => {
 
     return (
       <>
-        <Body1>
+        <Body1 fontWeight="bold">
           {totalResults} results for &quot;{titleSearch}&quot;
         </Body1>
         <Stack marginTop="16px" marginBottom="32px" spacing="16px">
@@ -79,12 +88,12 @@ const MovieDisplay = (props: MovieDisplayProps) => {
             <Flex key={movie.imdbID}>
               <Image
                 src={movie.Poster === "N/A" ? undefined : movie.Poster}
-                width="1in"
+                width="1.2in"
                 height="1.5in"
                 objectFit="cover"
                 overflow="hidden"
                 fallback={
-                  <Box width="1in" height="1.5in" backgroundColor="gray.50" />
+                  <Box width="1.2in" height="1.5in" backgroundColor="gray.50" />
                 }
               />
               <Box width="100%" paddingLeft="1rem">
@@ -106,8 +115,23 @@ const MovieDisplay = (props: MovieDisplayProps) => {
                     </Link>
                     <IconButton
                       isRound
-                      // isDisabled
                       aria-label="Nominate"
+                      isDisabled={
+                        movie.imdbID in nominations || numNominations === 5
+                      }
+                      onClick={() => {
+                        if (Object.keys(nominations).length === 5) {
+                          toast({
+                            title: "Maximum nominations reached",
+                            description: "Consider removing some.",
+                            status: "error",
+                            duration: 4000,
+                            isClosable: true,
+                          });
+                        } else {
+                          addNomination(movie);
+                        }
+                      }}
                       icon={<AddIcon />}
                     />
                   </Stack>
@@ -154,7 +178,9 @@ const MovieDisplay = (props: MovieDisplayProps) => {
     );
   }
 
-  return <>service unavailable</>;
+  return (
+    <DisplayAreaMessage message="The service is unavailable at the moment." />
+  );
 };
 
 export default MovieDisplay;

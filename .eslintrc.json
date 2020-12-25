@@ -39,6 +39,7 @@
     "no-unused-vars": "warn",
     "import/no-unresolved": "off",
     "react/react-in-jsx-scope": "off",
+    "react/no-array-index-key": "warn",
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-one-expression-per-line": "off",

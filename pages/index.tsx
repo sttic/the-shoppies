@@ -23,7 +23,7 @@ const MyArrowForwardIcon = () => (
 );
 
 const GetStartedSecondaryButton = (
-  <NextLink href={RoutePath.SignUp} passHref>
+  <NextLink href={RoutePath.Nominate} passHref>
     <Link textDecoration="none !important">
       <ButtonSecondary>Get started</ButtonSecondary>
     </Link>
@@ -82,7 +82,7 @@ const HomePage = () => (
               Nominate your favorite films.
             </Body>
             <Flex justify={["center", "center", "start"]}>
-              <NextLink href={RoutePath.SignUp} passHref>
+              <NextLink href={RoutePath.Nominate} passHref>
                 <Link textDecoration="none !important">
                   <ButtonCTA rightIcon={<MyArrowForwardIcon />}>
                     Get started

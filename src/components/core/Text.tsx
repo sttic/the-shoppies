@@ -46,7 +46,7 @@ export const Headline6 = chakra(Headline, {
 
 export const HeadlineAuto = chakra(Headline, {
   baseStyle: {
-    fontSize: [34, 34, 34, 48, 72].map((size) => `${size}px !important`),
+    fontSize: [28, 32, 32, 36].map((size) => `${size}px !important`),
     lineHeight: 1.25,
   },
 });

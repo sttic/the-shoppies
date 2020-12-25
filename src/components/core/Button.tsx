@@ -27,6 +27,12 @@ export const ButtonPrimary = chakra(Button, {
         background: `${theme.colors.primary_active} !important`,
       },
     },
+    _disabled: {
+      background: theme.colors.primary,
+      _hover: {
+        background: theme.colors.primary_active,
+      },
+    },
   },
 });
 

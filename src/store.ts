@@ -1,18 +1,14 @@
 import create from "zustand";
-import { IMovieResult } from "@/src/types";
+import { IMovieResult, NominationMap } from "@/src/types";
 
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/analytics";
 import "firebase/firestore";
-import firebaseConfig from "./firebaseConfig";
+import firebaseConfig from "@/src/firebaseConfig";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-}
-
-interface Nomination extends IMovieResult {
-  timestamp: number;
 }
 
 type State = {
@@ -20,11 +16,13 @@ type State = {
   auth: firebase.auth.Auth;
   analytics: firebase.analytics.Analytics | undefined;
   firestore: firebase.firestore.Firestore;
-  nominations: { [imdbID: string]: Nomination };
+  nominations: NominationMap;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   initAnalytics: () => Promise<void>;
   addNomination: (nomination: IMovieResult) => void;
   removeNomination: (nomination: IMovieResult) => void;
+  setLocalNominations: (nominations: NominationMap) => void;
+  setNominations: (nominations: NominationMap) => void;
   clearNominations: () => void;
 };
 
@@ -51,21 +49,31 @@ const useStore = create<State>((set, get) => ({
     }
   },
   addNomination: (nomination) => {
-    if (Object.keys(get().nominations).length < 5) {
-      set({
-        nominations: {
-          ...get().nominations,
-          [nomination.imdbID]: { ...nomination, timestamp: Date.now() },
-        },
+    const { nominations, setNominations } = get();
+    if (Object.keys(nominations).length < 5) {
+      setNominations({
+        ...nominations,
+        [nomination.imdbID]: { ...nomination, timestamp: Date.now() },
       });
     }
   },
   removeNomination: (nomination) => {
-    const { nominations } = get();
+    const { nominations, setNominations } = get();
     delete nominations[nomination.imdbID];
-    set({ nominations: { ...nominations } });
+    setNominations(nominations);
   },
-  clearNominations: () => set({ nominations: {} }),
+  setLocalNominations: (nominations: NominationMap) =>
+    set({ nominations: { ...nominations } }),
+  setNominations: (nominations: NominationMap) => {
+    const { auth, firestore } = get();
+
+    firestore
+      .collection("nominations")
+      .doc(auth.currentUser?.uid)
+      .set(nominations)
+      .then(() => set({ nominations: { ...nominations } }));
+  },
+  clearNominations: () => get().setNominations({}),
 }));
 
 export default useStore;

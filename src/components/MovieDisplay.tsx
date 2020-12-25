@@ -6,6 +6,7 @@ import {
   Image,
   Stack,
   Link,
+  useToast,
 } from "@chakra-ui/react";
 import {
   AddIcon,
@@ -18,7 +19,6 @@ import ReactPaginate from "react-paginate";
 import { IMovieData } from "@/src/types";
 import AwardGraphic from "@/components/svgs/undraw_awards_fieb.svg";
 import useStore from "@/src/store";
-import { useToast } from "@chakra-ui/react";
 
 interface MovieDisplayProps {
   titleSearch: string;
@@ -27,7 +27,7 @@ interface MovieDisplayProps {
   data?: IMovieData;
 }
 
-const DisplayAreaMessage = (props: { message: string }) => (
+const DisplayAreaMessage = ({ message }: { message: string }) => (
   <Grid height="90%">
     <Body
       gridColumn={1}
@@ -36,7 +36,7 @@ const DisplayAreaMessage = (props: { message: string }) => (
       fontSize="16px"
       fontWeight="bold"
     >
-      {props.message}
+      {message}
     </Body>
     <Box
       gridColumn={1}

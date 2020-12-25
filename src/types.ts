@@ -12,3 +12,11 @@ export interface IMovieData {
   Response?: string;
   Error?: string;
 }
+
+export interface Nomination extends IMovieResult {
+  timestamp: number;
+}
+
+export interface NominationMap {
+  [imdbID: string]: Nomination;
+}

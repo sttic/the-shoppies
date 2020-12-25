@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useDebouncedCallback } from "use-debounce";
@@ -27,7 +27,7 @@ import {
   HeadlineAuto,
   Headline5,
 } from "@/components/core/Text";
-import { IMovieData } from "@/src/types";
+import { IMovieData, NominationMap } from "@/src/types";
 import MovieDisplay from "@/components/MovieDisplay";
 import useStore from "@/src/store";
 import withAuth from "@/components/withAuth";
@@ -55,7 +55,9 @@ const NominatePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState<IMovieData | undefined>(undefined);
   const auth = useStore((state) => state.auth);
+  const firestore = useStore((state) => state.firestore);
   const nominations = useStore((state) => state.nominations);
+  const setLocalNominations = useStore((state) => state.setLocalNominations);
   const removeNomination = useStore((state) => state.removeNomination);
   const clearNominations = useStore((state) => state.clearNominations);
   const nominationsList = Object.values(nominations).sort((a, b) =>
@@ -66,8 +68,7 @@ const NominatePage = () => {
     const router = useRouter();
 
     const handleSignOut = () => {
-      router.push(RoutePath.Home);
-      auth.signOut();
+      router.push(RoutePath.Home).then(() => auth.signOut());
     };
 
     return <ButtonSecondary onClick={handleSignOut}>Sign out</ButtonSecondary>;
@@ -94,6 +95,19 @@ const NominatePage = () => {
       setIsInterminate(false);
     }
   }, 1000);
+
+  useEffect(() => {
+    firestore
+      .collection("nominations")
+      .doc(auth.currentUser?.uid)
+      .get()
+      .then((document) => {
+        const documentData: NominationMap | undefined = document.data();
+        if (documentData) {
+          setLocalNominations(documentData);
+        }
+      });
+  }, [auth, firestore, setLocalNominations]);
 
   return (
     <>

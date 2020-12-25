@@ -30,17 +30,7 @@ import {
 import { IMovieData } from "@/src/types";
 import MovieDisplay from "@/components/MovieDisplay";
 import useStore from "@/src/store";
-
-const SignOutSecondaryButton = () => {
-  const router = useRouter();
-
-  const handleSignOut = () => {
-    // TODO:
-    router.push(RoutePath.Home);
-  };
-
-  return <ButtonSecondary onClick={handleSignOut}>Sign out</ButtonSecondary>;
-};
+import withAuth from "@/components/withAuth";
 
 const LayoutCard = chakra(Card, {
   baseStyle: {
@@ -64,12 +54,24 @@ const NominatePage = () => {
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState<IMovieData | undefined>(undefined);
+  const auth = useStore((state) => state.auth);
   const nominations = useStore((state) => state.nominations);
   const removeNomination = useStore((state) => state.removeNomination);
   const clearNominations = useStore((state) => state.clearNominations);
   const nominationsList = Object.values(nominations).sort((a, b) =>
     a.timestamp > b.timestamp ? 1 : -1
   );
+
+  const SignOutSecondaryButton = () => {
+    const router = useRouter();
+
+    const handleSignOut = () => {
+      router.push(RoutePath.Home);
+      auth.signOut();
+    };
+
+    return <ButtonSecondary onClick={handleSignOut}>Sign out</ButtonSecondary>;
+  };
 
   const debounced = useDebouncedCallback((title: string, page: number) => {
     setCurrentPage(page);
@@ -270,4 +272,4 @@ const NominatePage = () => {
   );
 };
 
-export default NominatePage;
+export default withAuth(NominatePage);

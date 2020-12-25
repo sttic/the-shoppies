@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import {
   Box,
   Flex,
@@ -11,6 +12,7 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { ButtonPrimary } from "@/components/core/Button";
@@ -24,6 +26,7 @@ import {
 import theme from "@/src/theme";
 import { Formik, Form, Field } from "formik";
 import RoutePath from "@/src/routes";
+import useStore from "@/src/store";
 
 const encodedBackgroundSVG =
   "%3Csvg%20viewBox%3D%220%200%20536%20617%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20clip-path%3D%22url(%23clip0)%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M0%20616.926V617H915V0H179.949L398.437%20218.489L0%20616.926Z%22%20fill%3D%22%23FFA781%22%2F%3E%3Cpath%20d%3D%22M712.79%20218.83C712.79%20392.42%20572.07%20533.15%20398.48%20533.15C311.58%20533.15%20232.93%20497.89%20176.03%20440.89L176.38%20-3.56998C233.24%20-60.36%20311.76%20-95.48%20398.48%20-95.48C572.07%20-95.48%20712.79%2045.24%20712.79%20218.83Z%22%20fill%3D%22%23FFCB67%22%2F%3E%3Cpath%20d%3D%22M398.44%20218.49L176.03%20440.89C119.27%20384.03%2084.16%20305.53%2084.16%20218.83C84.16%20131.96%20119.41%2053.3202%20176.38%20-3.56982L398.44%20218.49Z%22%20fill%3D%22%23008060%22%2F%3E%3C%2Fg%3E%3Cdefs%3E%3CclipPath%20id%3D%22clip0%22%3E%3Crect%20width%3D%22536%22%20height%3D%22617%22%20fill%3D%22white%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3C%2Fsvg%3E";
@@ -36,6 +39,9 @@ const passwordRegex = new RegExp(
 );
 
 const SignUpPage = () => {
+  const auth = useStore((state) => state.auth);
+  const router = useRouter();
+  const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
 
   const validateEmail = (email: string) => {
@@ -104,10 +110,32 @@ const SignUpPage = () => {
                 <Formik
                   initialValues={{ email: "", password: "" }}
                   onSubmit={(values, actions) => {
-                    setTimeout(() => {
-                      alert(JSON.stringify(values, null, 2));
-                      actions.setSubmitting(false);
-                    }, 1000);
+                    const { email, password } = values;
+
+                    auth
+                      .createUserWithEmailAndPassword(email, password)
+                      .then(() => {
+                        router.push(RoutePath.Nominate);
+                      })
+                      .catch((error) => {
+                        actions.setSubmitting(false);
+
+                        const duplicateEmail =
+                          error.code === "auth/email-already-in-use";
+
+                        toast({
+                          title: duplicateEmail
+                            ? "Duplicate email"
+                            : "Invalid password",
+                          description: duplicateEmail
+                            ? error.message ||
+                              "The email address is already in use by another account."
+                            : "Please use a valid password.",
+                          status: "error",
+                          duration: 4000,
+                          isClosable: true,
+                        });
+                      });
                   }}
                 >
                   {(props) => (

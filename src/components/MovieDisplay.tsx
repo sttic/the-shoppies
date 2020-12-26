@@ -95,7 +95,9 @@ const MovieDisplay = (props: MovieDisplayProps) => {
     return (
       <>
         <Body1 fontWeight="bold">
-          {totalResults} results for &quot;{titleSearch}&quot;
+          {totalResults} result{totalResults === 1 || "s"} for &quot;
+          {titleSearch}
+          &quot;
         </Body1>
         <Stack marginTop="16px" marginBottom="32px" spacing="16px">
           {data.Search.map((movie) => (

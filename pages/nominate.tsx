@@ -109,7 +109,7 @@ const NominatePage = () => {
       setData(undefined);
       setIsInterminate(false);
     }
-  }, 1000);
+  }, 500);
 
   useEffect(() => {
     const unsubscribe = firestore
@@ -137,7 +137,7 @@ const NominatePage = () => {
         <title>The Shoppies - Nominate</title>
       </Head>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -148,17 +148,19 @@ const NominatePage = () => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Body1>You reached 5 nominations!</Body1>
+            <Body1>You nominated 5 movies!</Body1>
           </ModalBody>
           <ModalFooter>
-            <ButtonPrimary onClick={onClose}>Close</ButtonPrimary>
+            <ButtonPrimary width={["100%", "min-content"]} onClick={onClose}>
+              Close
+            </ButtonPrimary>
           </ModalFooter>
         </ModalContent>
       </Modal>
 
       <Box background={theme.colors.background} minHeight="100vh">
         <Header rightElement={<SignOutSecondaryButton />} />
-        <Container>
+        <Container marginTop="1rem">
           <HeadlineAuto marginBottom="1rem">
             Nominate your top 5 movies
           </HeadlineAuto>
@@ -230,7 +232,8 @@ const NominatePage = () => {
               position="sticky"
               top={0}
             >
-              <Headline5 marginBottom="1rem">Your nominations</Headline5>
+              <Headline5 marginBottom="4px">Your nominations</Headline5>
+              <Body1 marginBottom="1rem">{5 - numNominations} remaining</Body1>
               <Stack marginBottom="1rem">
                 {nominationsList.map((nomination) => (
                   <NominationBox key={nomination.imdbID}>
@@ -286,6 +289,10 @@ const NominatePage = () => {
       </Box>
 
       <style jsx global>{`
+        body {
+          background: ${theme.colors.background};
+        }
+
         .pagination {
           display: flex;
           justify-content: center;

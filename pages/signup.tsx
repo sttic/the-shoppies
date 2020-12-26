@@ -11,6 +11,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Link as ChakraLink,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -22,7 +23,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { ButtonPrimary, ButtonSecondary } from "@/components/core/Button";
 import { Card, Container } from "@/components/core/Layout";
 import {
@@ -42,9 +43,6 @@ const encodedBackgroundSVG =
 
 const emailRegex = new RegExp(
   "^[\\w.\\-]{1,100}@[\\w.\\-]{1,100}\\.[A-Za-z]{2,4}$"
-);
-const passwordRegex = new RegExp(
-  `(?:(?:(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_])|(?:(?=.*?[0-9])|(?=.*?[A-Z])|(?=.*?[-!@#$%&*ˆ+=_])))|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_]))[A-Za-z0-9-!@#$%&*ˆ+=_]{6,15}`
 );
 
 const SignUpPage = () => {
@@ -75,10 +73,8 @@ const SignUpPage = () => {
       error = "Please enter a password";
     } else if (password.length < 6) {
       error = "Password needs to be at least 6 characters long";
-    } else if (password.length > 15) {
-      error = "Password needs to be less than 16 characters long";
-    } else if (passwordRegex.test(password)) {
-      error = "Password contains invalid characters";
+    } else if (password.length > 32) {
+      error = "Password should be at most 32 characters long";
     }
 
     return error;
@@ -101,7 +97,7 @@ const SignUpPage = () => {
         <title>The Shoppies - Sign up</title>
       </Head>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -127,9 +123,9 @@ const SignUpPage = () => {
               .
             </Body1>
             <Body1>
-              <br />I encourage signing up as the pre-made account is publicly
-              accessible for demonstration purposes, so it may not have a fresh
-              experience.
+              <br />I encourage signing up since the pre-made account is
+              publicly accessible for demonstration purposes, so it may not have
+              a fresh experience.
             </Body1>
             <br />
             <Body1>
@@ -139,11 +135,11 @@ const SignUpPage = () => {
             </Body1>
           </ModalBody>
           <ModalFooter>
-            <Stack direction="row">
-              <ButtonPrimary onClick={onClose}>Close</ButtonPrimary>
+            <Stack direction="column" justify="end" width="100%">
               <ButtonSecondary paddingY="16px" onClick={usePreMadeAccount}>
                 Use pre-made account
               </ButtonSecondary>
+              <ButtonPrimary onClick={onClose}>Close</ButtonPrimary>
             </Stack>
           </ModalFooter>
         </ModalContent>
@@ -166,10 +162,22 @@ const SignUpPage = () => {
                 minWidth="256px"
                 maxWidth={["100%", "4.5in", "5in", "5in", "5.5in"]}
                 paddingX={["2.5rem", "3.5rem", "4rem"]}
-                paddingTop={["6rem"]}
+                paddingTop={["5rem"]}
                 paddingBottom={["6rem"]}
                 marginLeft={[0, 0, 0, "10%"]}
               >
+                <NextLink href={RoutePath.Home} passHref>
+                  <ChakraLink
+                    display="block"
+                    marginBottom="8px"
+                    color="blue.500"
+                    fontSize="14px"
+                  >
+                    <Flex align="center">
+                      <ArrowBackIcon marginRight="4px" /> Go back
+                    </Flex>
+                  </ChakraLink>
+                </NextLink>
                 <Headline4 color={theme.colors.secondary} marginBottom="12px">
                   The Shoppies
                 </Headline4>

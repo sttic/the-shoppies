@@ -11,10 +11,11 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Link as ChakraLink,
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { ButtonPrimary } from "@/components/core/Button";
 import { Card, Container } from "@/components/core/Layout";
 import {
@@ -86,10 +87,22 @@ const LoginPage = () => {
                 minWidth="256px"
                 maxWidth={["100%", "4.5in", "5in", "5in", "5.5in"]}
                 paddingX={["2.5rem", "3.5rem", "4rem"]}
-                paddingTop={["6rem"]}
+                paddingTop={["5rem"]}
                 paddingBottom={["6rem"]}
                 marginLeft={[0, 0, 0, "10%"]}
               >
+                <NextLink href={RoutePath.Home} passHref>
+                  <ChakraLink
+                    display="block"
+                    marginBottom="8px"
+                    color="blue.500"
+                    fontSize="14px"
+                  >
+                    <Flex align="center">
+                      <ArrowBackIcon marginRight="4px" /> Go back
+                    </Flex>
+                  </ChakraLink>
+                </NextLink>
                 <Headline4 color={theme.colors.secondary} marginBottom="12px">
                   The Shoppies
                 </Headline4>

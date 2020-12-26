@@ -95,7 +95,7 @@ const NominatePage = () => {
 
     if (trimmedTitle) {
       fetch(
-        `http://www.omdbapi.com/?type=movie&s=${trimmedTitle}&page=${page}&apikey=f92ef688`
+        `https://www.omdbapi.com/?type=movie&s=${trimmedTitle}&page=${page}&apikey=f92ef688`
       )
         .then((res) => res.json())
         .then((resData) => setData(resData))

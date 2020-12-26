@@ -83,7 +83,7 @@ const MovieDisplay = (props: MovieDisplayProps) => {
         return <DisplayAreaMessage message="Your API key became invalid." />;
       default:
         return (
-          <DisplayAreaMessage message={`An error as occurred: ${data.Error}`} />
+          <DisplayAreaMessage message="An error has occurred with the OMDb API. Please try again later." />
         );
     }
   }

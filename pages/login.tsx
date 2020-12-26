@@ -66,7 +66,7 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-        <title>The Shoppies - Login</title>
+        <title>The Shoppies - Log in</title>
       </Head>
 
       <Box
@@ -94,7 +94,7 @@ const LoginPage = () => {
                   The Shoppies
                 </Headline4>
                 <HeadlineVarient fontSize="20px !important" marginBottom="2rem">
-                  Login
+                  Log in
                 </HeadlineVarient>
                 <Formik
                   initialValues={{ email: "", password: "" }}
@@ -192,7 +192,7 @@ const LoginPage = () => {
                         isLoading={props.isSubmitting}
                         type="submit"
                       >
-                        Login
+                        Log in
                       </ButtonPrimary>
                     </Form>
                   )}

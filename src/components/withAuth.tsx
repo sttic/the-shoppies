@@ -18,7 +18,7 @@ function withAuth(Component: FunctionComponent): FunctionComponent {
 
     useEffect(() => {
       if (isAuthenticated === false) {
-        router.push(RoutePath.Login);
+        router.push(RoutePath.SignUp);
       }
     }, [isAuthenticated, router]);
 

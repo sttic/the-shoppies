@@ -22,8 +22,19 @@ type State = {
   addNomination: (nomination: IMovieResult) => void;
   removeNomination: (nomination: IMovieResult) => void;
   setLocalNominations: (nominations: NominationMap) => void;
-  setNominations: (nominations: NominationMap) => void;
   clearNominations: () => void;
+};
+
+const setOnlineNominations = (nominations: NominationMap) => {
+  const { currentUser } = firebase.auth();
+
+  if (currentUser) {
+    firebase
+      .firestore()
+      .collection("nominations")
+      .doc(currentUser.uid)
+      .set(nominations);
+  }
 };
 
 const useStore = create<State>((set, get) => ({
@@ -49,31 +60,30 @@ const useStore = create<State>((set, get) => ({
     }
   },
   addNomination: (nomination) => {
-    const { nominations, setNominations } = get();
+    const { nominations } = get();
     if (Object.keys(nominations).length < 5) {
-      setNominations({
+      setOnlineNominations({
         ...nominations,
         [nomination.imdbID]: { ...nomination, timestamp: Date.now() },
       });
     }
   },
   removeNomination: (nomination) => {
-    const { nominations, setNominations } = get();
+    const { nominations } = get();
     delete nominations[nomination.imdbID];
-    setNominations(nominations);
+    setOnlineNominations(nominations);
   },
-  setLocalNominations: (nominations: NominationMap) =>
-    set({ nominations: { ...nominations } }),
-  setNominations: (nominations: NominationMap) => {
-    const { auth, firestore } = get();
-
-    firestore
-      .collection("nominations")
-      .doc(auth.currentUser?.uid)
-      .set(nominations)
-      .then(() => set({ nominations: { ...nominations } }));
+  clearNominations: () => setOnlineNominations({}),
+  setLocalNominations: (nominations: NominationMap) => {
+    const nominationsList = Object.values(nominations)
+      .sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1))
+      .slice(0, 5);
+    const newNominations = nominationsList.reduce(
+      (prev, curr) => ({ ...prev, [curr.imdbID]: curr }),
+      {}
+    );
+    set({ nominations: newNominations });
   },
-  clearNominations: () => get().setNominations({}),
 }));
 
 export default useStore;

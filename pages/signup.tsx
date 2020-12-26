@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -11,13 +11,22 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Stack,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { ButtonPrimary } from "@/components/core/Button";
+import { ButtonPrimary, ButtonSecondary } from "@/components/core/Button";
 import { Card, Container } from "@/components/core/Layout";
 import {
+  Body1,
   Body2,
   Headline4,
   HeadlineVarient,
@@ -42,6 +51,7 @@ const SignUpPage = () => {
   const auth = useStore((state) => state.auth);
   const router = useRouter();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
 
   const validateEmail = (email: string) => {
@@ -74,11 +84,70 @@ const SignUpPage = () => {
     return error;
   };
 
+  const usePreMadeAccount = () => {
+    auth
+      .signInWithEmailAndPassword("hi@tommydeng.com", "password")
+      .then(onClose)
+      .then(() => router.push(RoutePath.Nominate));
+  };
+
+  useEffect(() => {
+    onOpen();
+  }, [onOpen]);
+
   return (
     <>
       <Head>
         <title>The Shoppies - Sign up</title>
       </Head>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            Hello! Welcome to The Shoppies{" "}
+            <span role="img" aria-label="wave">
+              👋
+            </span>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Body1>
+              Thank you for checking out my submission for the Shopify UX
+              Developer &amp; Web Developer Intern challenge!
+            </Body1>
+            <br />
+            <Body1>
+              Both email <b>authentication</b> and saving nominations to a{" "}
+              <b>database</b> are implemented. Feel free to sign up (any unique
+              email will work) or log in using a{" "}
+              <Link fontSize="16px" onClick={usePreMadeAccount}>
+                pre-made account
+              </Link>
+              .
+            </Body1>
+            <Body1>
+              <br />I encourage signing up as the pre-made account is publicly
+              accessible for demonstration purposes, so it may not have a fresh
+              experience.
+            </Body1>
+            <br />
+            <Body1>
+              Thank you,
+              <br />
+              Tommy Deng
+            </Body1>
+          </ModalBody>
+          <ModalFooter>
+            <Stack direction="row">
+              <ButtonPrimary onClick={onClose}>Close</ButtonPrimary>
+              <ButtonSecondary paddingY="16px" onClick={usePreMadeAccount}>
+                Use pre-made account
+              </ButtonSecondary>
+            </Stack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       <Box
         height="100vh"
@@ -213,7 +282,7 @@ const SignUpPage = () => {
                 <Body2 marginTop="36px">
                   Already have an account?{" "}
                   <NextLink href={RoutePath.Login} passHref>
-                    <Link>Login</Link>
+                    <Link>Log in</Link>
                   </NextLink>
                 </Body2>
               </Card>

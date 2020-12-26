@@ -6,6 +6,7 @@ import {
   Image,
   Stack,
   Link,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import {
@@ -70,8 +71,21 @@ const MovieDisplay = (props: MovieDisplayProps) => {
     );
   }
 
-  if (data.Error) {
-    return <DisplayAreaMessage message="No movies found." />;
+  if (data.Response === "False" || data.Error) {
+    switch (data.Error) {
+      case "Movie not found!":
+        return (
+          <DisplayAreaMessage
+            message={`No movie found for "${titleSearch}".`}
+          />
+        );
+      case "Invalid API key!":
+        return <DisplayAreaMessage message="Your API key became invalid." />;
+      default:
+        return (
+          <DisplayAreaMessage message={`An error as occurred: ${data.Error}`} />
+        );
+    }
   }
 
   if (data.Search) {
@@ -103,37 +117,41 @@ const MovieDisplay = (props: MovieDisplayProps) => {
                 <Flex justify="space-between">
                   <Body>{movie.Year}</Body>
                   <Stack direction="row">
-                    <Link
-                      href={`https://www.imdb.com/title/${movie.imdbID}/`}
-                      isExternal
-                    >
+                    <Tooltip hasArrow label="See IMDb">
+                      <Link
+                        href={`https://www.imdb.com/title/${movie.imdbID}/`}
+                        isExternal
+                      >
+                        <IconButton
+                          isRound
+                          aria-label="Open in IMDb"
+                          icon={<ExternalLinkIcon />}
+                        />
+                      </Link>
+                    </Tooltip>
+                    <Tooltip hasArrow label="Nominate">
                       <IconButton
                         isRound
-                        aria-label="Open in IMDb"
-                        icon={<ExternalLinkIcon />}
-                      />
-                    </Link>
-                    <IconButton
-                      isRound
-                      aria-label="Nominate"
-                      isDisabled={
-                        movie.imdbID in nominations || numNominations === 5
-                      }
-                      onClick={() => {
-                        if (Object.keys(nominations).length === 5) {
-                          toast({
-                            title: "Maximum nominations reached",
-                            description: "Consider removing some.",
-                            status: "error",
-                            duration: 4000,
-                            isClosable: true,
-                          });
-                        } else {
-                          addNomination(movie);
+                        aria-label="Nominate"
+                        isDisabled={
+                          movie.imdbID in nominations || numNominations === 5
                         }
-                      }}
-                      icon={<AddIcon />}
-                    />
+                        onClick={() => {
+                          if (Object.keys(nominations).length === 5) {
+                            toast({
+                              title: "Maximum nominations reached",
+                              description: "Consider removing some.",
+                              status: "error",
+                              duration: 4000,
+                              isClosable: true,
+                            });
+                          } else {
+                            addNomination(movie);
+                          }
+                        }}
+                        icon={<AddIcon />}
+                      />
+                    </Tooltip>
                   </Stack>
                 </Flex>
               </Box>
@@ -179,7 +197,7 @@ const MovieDisplay = (props: MovieDisplayProps) => {
   }
 
   return (
-    <DisplayAreaMessage message="The service is unavailable at the moment." />
+    <DisplayAreaMessage message="The OMDb service is unavailable at the moment." />
   );
 };
 

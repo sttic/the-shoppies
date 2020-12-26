@@ -14,8 +14,18 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
+  Link,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Stack,
   Flex,
+  Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { CloseIcon, MinusIcon, SearchIcon } from "@chakra-ui/icons";
 import Header from "@/components/Header";
@@ -23,6 +33,7 @@ import { ButtonPrimary, ButtonSecondary } from "@/components/core/Button";
 import { Card, Container } from "@/components/core/Layout";
 import {
   Body,
+  Body1,
   Headline,
   HeadlineAuto,
   Headline5,
@@ -31,6 +42,7 @@ import { IMovieData, NominationMap } from "@/src/types";
 import MovieDisplay from "@/components/MovieDisplay";
 import useStore from "@/src/store";
 import withAuth from "@/components/withAuth";
+import Reward, { RewardElement } from "react-rewards";
 
 const LayoutCard = chakra(Card, {
   baseStyle: {
@@ -53,7 +65,7 @@ const NominatePage = () => {
   const [titleSearch, setTitleSearch] = useState("");
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<IMovieData | undefined>(undefined);
+  const [data, setData] = useState<IMovieData | undefined>();
   const auth = useStore((state) => state.auth);
   const firestore = useStore((state) => state.firestore);
   const nominations = useStore((state) => state.nominations);
@@ -63,6 +75,9 @@ const NominatePage = () => {
   const nominationsList = Object.values(nominations).sort((a, b) =>
     a.timestamp > b.timestamp ? 1 : -1
   );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const numNominations = Object.keys(nominations).length;
+  const [rewardButton, setRewardButton] = useState<RewardElement | null>();
 
   const SignOutSecondaryButton = () => {
     const router = useRouter();
@@ -97,23 +112,50 @@ const NominatePage = () => {
   }, 1000);
 
   useEffect(() => {
-    firestore
+    const unsubscribe = firestore
       .collection("nominations")
       .doc(auth.currentUser?.uid)
-      .get()
-      .then((document) => {
-        const documentData: NominationMap | undefined = document.data();
-        if (documentData) {
-          setLocalNominations(documentData);
+      .onSnapshot((snapshot) => {
+        const snapshotData: NominationMap | undefined = snapshot.data();
+        if (snapshotData) {
+          setLocalNominations(snapshotData);
         }
       });
-  }, [auth, firestore, setLocalNominations]);
+
+    if (numNominations === 5) {
+      onOpen();
+    }
+
+    return () => {
+      unsubscribe();
+    };
+  }, [auth, firestore, setLocalNominations, numNominations, onOpen]);
 
   return (
     <>
       <Head>
         <title>The Shoppies - Nominate</title>
       </Head>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            Congrats!{" "}
+            <span role="img" aria-label="confetti">
+              🎉
+            </span>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Body1>You reached 5 nominations!</Body1>
+          </ModalBody>
+          <ModalFooter>
+            <ButtonPrimary onClick={onClose}>Close</ButtonPrimary>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <Box background={theme.colors.background} minHeight="100vh">
         <Header rightElement={<SignOutSecondaryButton />} />
         <Container>
@@ -200,12 +242,15 @@ const NominatePage = () => {
                         <Body>{nomination.Year}</Body>
                       </Box>
                       <Flex height="auto" align="center">
-                        <IconButton
-                          isRound
-                          aria-label="Remove Nomination"
-                          onClick={() => removeNomination(nomination)}
-                          icon={<MinusIcon />}
-                        />
+                        <Tooltip hasArrow label="Remove">
+                          <IconButton
+                            isRound
+                            marginLeft="1rem"
+                            aria-label="Remove Nomination"
+                            onClick={() => removeNomination(nomination)}
+                            icon={<MinusIcon />}
+                          />
+                        </Tooltip>
                       </Flex>
                     </Flex>
                   </NominationBox>
@@ -216,22 +261,25 @@ const NominatePage = () => {
                     <NominationBox key={index} />
                   ))}
               </Stack>
-              <ButtonPrimary
-                isFullWidth
-                isDisabled={Object.keys(nominations).length !== 5}
-                marginBottom="8px"
+              <Reward
+                ref={(ref) => {
+                  setRewardButton(ref);
+                }}
+                type="confetti"
+                config={{ zIndex: 1 }}
               >
-                Submit
-              </ButtonPrimary>
-              <Body
-                color="blue.500"
-                cursor="pointer"
-                userSelect="none"
-                _hover={{ textDecoration: "underline" }}
-                onClick={() => clearNominations()}
-              >
+                <ButtonPrimary
+                  isFullWidth
+                  isDisabled={numNominations !== 5}
+                  marginBottom="8px"
+                  onClick={() => rewardButton?.rewardMe()}
+                >
+                  Submit
+                </ButtonPrimary>
+              </Reward>
+              <Link color="blue.500" onClick={() => clearNominations()}>
                 Clear all
-              </Body>
+              </Link>
             </LayoutCard>
           </Grid>
         </Container>

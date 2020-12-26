@@ -59,3 +59,7 @@ Please visit [shopify.tommydeng.com](https://shopify.tommydeng.com/) or see the 
 - [Hero graphic](src/components/svgs/undraw_awards_fieb.svg) from [unDraw](https://undraw.co/)
 - Sign up and log in background asset and inspiration from [Shopify Accounts](https://accounts.shopify.com/)
 - General colors from [Shopify](https://www.shopify.com/)
+
+## License
+
+[MIT License](LICENSE)

@@ -168,7 +168,7 @@ const SignUpPage = () => {
               >
                 <NextLink href={RoutePath.Home} passHref>
                   <ChakraLink
-                    display="block"
+                    display="inline-block"
                     marginBottom="8px"
                     color="blue.500"
                     fontSize="14px"

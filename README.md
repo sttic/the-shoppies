@@ -1,10 +1,15 @@
-# The Shoppies: Movie awards for entrepreneurs
+<h1 align="center">
+The Shoppies
+<br />
+Movie awards for entrepreneurs
+</h1>
 
 ![Home page screenshot](docs/images/hero_desktop.png)
 
 <p align="center"><sup><i>Home page</i></sup></p>
 
 The Shoppies is my submission for the Shopify UX Developer & Web Developer Intern challenge for Summer 2021.
+Check it out at [shopify.tommydeng.com](https://shopify.tommydeng.com/).
 
 ## The Challenge
 
@@ -26,6 +31,8 @@ The main objectives were to complete the following.
 > 4. Movies in search results can be added and removed from the nomination list.
 > 5. If a search result has already been nominated, disable its nominate button.
 > 6. Display a banner when the user has 5 nominations.
+
+In addition to these requirements, saving nomination lists to a database was implemented so users can keep their data if they leave the page.
 
 ## Hosting
 
@@ -53,6 +60,39 @@ Please visit [shopify.tommydeng.com](https://shopify.tommydeng.com/) or see the 
 - GitHub Actions
 - Next.js
 - Node.js
+- TypeScript
+
+## Getting Started
+
+Clone this repo and run `npm install` while in the repo root directory to install project dependencies.
+
+There are eight commands available:
+
+```
+# start a development server:
+npm run dev
+
+# create a production build:
+npm run build
+
+# start a production server:
+npm start
+
+# export to static HTML
+npm run export
+
+# typecheck TypeScript
+npm run typecheck
+
+# format with Prettier
+npm run format
+
+# check for issues with ESLint
+npm run lint
+
+# fix linting issues with ESLint
+npm run lint-fix
+```
 
 ## Art Credits
 
